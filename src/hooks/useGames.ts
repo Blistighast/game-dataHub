@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { url, key } from "../services/apiClient";
 
-interface Game {
+export interface Game {
   id: number;
   slug: string;
   name: string;
   released: string;
   rating: number;
+  background_image: string;
 }
 
 interface fetchGamesResponse {
