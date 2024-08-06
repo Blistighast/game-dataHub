@@ -26,10 +26,11 @@ interface fetchGamesResponse {
 const useGames = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
-
+    setLoading(true);
     const fetchGames = async () => {
       try {
         const res = await fetch(`${url}/games?key=${key}`, {
@@ -37,15 +38,18 @@ const useGames = () => {
         });
         const gameData: fetchGamesResponse = await res.json();
         setGames(gameData.results);
+        setLoading(false);
       } catch (err: any) {
         setError(err.message);
+        setLoading(false);
       }
       return () => controller.abort();
     };
+
     fetchGames();
   }, []);
 
-  return { games, error };
+  return { games, error, isLoading };
 };
 
 export default useGames;
