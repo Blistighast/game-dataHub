@@ -10,13 +10,17 @@ function App() {
         base: `"nav" "main"`,
         lg: `"nav nav" "aside main"`, //replacement for css media query
       }}
+      templateColumns={{
+        base: "1fr",
+        lg: "200px 1fr",
+      }}
     >
-      <GridItem area="nav">
+      <GridItem area="nav" marginBottom={1}>
         <Navbar />
       </GridItem>
       {
         <Show above="lg">
-          <GridItem area="aside">
+          <GridItem area="aside" paddingX={5}>
             <GenreList />
           </GridItem>
         </Show>
