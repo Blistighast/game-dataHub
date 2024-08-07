@@ -6,21 +6,40 @@ interface fetchResponse<T> {
   results: T[];
 }
 
-const useData = <T>(endpoint: string, queryParam?: string, deps?: any[]) => {
+interface QueryParam {
+  genres: number | undefined;
+  parent_platforms: number | undefined;
+}
+
+const useData = <T>(
+  endpoint: string,
+  queryParam?: QueryParam | any,
+  deps?: any[]
+) => {
   const [data, setData] = useState<T[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
+
+  const queryParamFormatter = () => {
+    let queryString = "";
+    if (queryParam) {
+      Object.keys(queryParam).map((key: string) => {
+        const query = queryParam[key] ? `&${key}=${queryParam[key]}` : "";
+        queryString = queryString + query;
+      });
+    }
+    return queryString;
+  };
 
   useEffect(
     () => {
       const controller = new AbortController();
       setLoading(true);
       const fetchGenres = async () => {
+        // console.log(`${url}${endpoint}?key=${key}${queryParamFormatter()}`);
         try {
           const res = await fetch(
-            `${url}${endpoint}?key=${key}${
-              queryParam ? `&genres=${queryParam}` : ""
-            }`,
+            `${url}${endpoint}?key=${key}${queryParamFormatter()}`,
             {
               signal: controller.signal,
             }
